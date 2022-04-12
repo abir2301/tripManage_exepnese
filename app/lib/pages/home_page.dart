@@ -10,14 +10,12 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
       // ignore: unnecessary_const
-      drawer:   Drawer(
-      child: Column(
-        children: [
-          
-        ],
-      ),
+      drawer: Drawer(
+        child: Column(
+          children: [],
+        ),
       ),
       body: const Center(child: const Text("home page center ")),
     );
