@@ -1,0 +1,39 @@
+        body: Row(
+      children: <Widget>[
+        NavigationRail(
+          elevation: 3,
+          //extended: true,
+          onDestinationSelected: (value) {
+            setState(() {
+              _selectedIndex = value;
+            });
+          },
+          selectedIndex: _selectedIndex,
+          labelType: NavigationRailLabelType.selected,
+          destinations: const <NavigationRailDestination>[
+            NavigationRailDestination(
+              padding: EdgeInsets.only(top: 20),
+              icon: Icon(Icons.home),
+              // selectedIcon: Icon(Icons.favorite),
+              label: Text('Home'),
+            ),
+            NavigationRailDestination(
+              icon: Icon(Icons.category),
+              // selectedIcon: Icon(Icons.favorite),
+              label: Text('Categories  '),
+            ),
+            NavigationRailDestination(
+              icon: Icon(Icons.settings),
+              selectedIcon: Icon(Icons.category),
+              label: Text('Settings '),
+            ),
+          ],
+        ),
+        const VerticalDivider(thickness: 1, width: 1),
+        Expanded(
+          child: Center(
+            child: Text('selectedIndex: $_selectedIndex'),
+          ),
+        )
+      ],
+    ));
