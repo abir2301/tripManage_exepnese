@@ -1,10 +1,11 @@
-class Categor {
+class Category {
   late int categoryid;
   late String categoryname;
-  Categor({
+  Category({
+    required this.categoryid,
     required this.categoryname,
   });
-  Categor.fromMap(Map map) {
+  Category.fromMap(Map map) {
     categoryid = map['categoryId'];
     categoryname = map['categoryName'];
     print("frommap");

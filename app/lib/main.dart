@@ -1,5 +1,6 @@
 import 'package:app/pages/app_page.dart';
 import 'package:app/pages/home_page.dart';
+import 'package:app/presentation/trip/add_new_trip.dart';
 import 'package:app/provider/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
