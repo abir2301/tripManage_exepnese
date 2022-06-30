@@ -1,3 +1,4 @@
+import 'package:app/database/dbhelper.dart';
 import 'package:app/pages/category_page.dart';
 import 'package:app/pages/settings_pages.dart';
 import 'package:app/pages/trip_page.dart';
@@ -5,6 +6,7 @@ import 'package:app/provider/categories_provider.dart';
 import 'package:app/provider/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sqflite/sqflite.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);

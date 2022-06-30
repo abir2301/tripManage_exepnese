@@ -1,17 +1,19 @@
+import 'package:app/database/categories_operations.dart';
 import 'package:app/model/categories.dart';
 import 'package:flutter/cupertino.dart';
 
 class CategoriesProvider extends ChangeNotifier {
-  List<Category> categories = [
-    Category(categoryid: 0, categoryname: "transport "),
-  ];
+  CategoryOperations categoryOperations = CategoryOperations();
+  var categories = CategoryOperations().getAllCategories();
+
   void addCategory(Category category) {
-    categories.add(category);
+    categoryOperations.insertCategory(category);
+    print(categories);
     notifyListeners();
   }
 
   void removeCategory(Category category) {
-    categories.remove(category);
+    categoryOperations.deleteCategory(category);
     notifyListeners();
   }
 }

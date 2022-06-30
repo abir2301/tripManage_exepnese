@@ -7,7 +7,7 @@ class CategoryOperations {
 
   final dbhelper = DBhelper.instance;
 
-  createCategory(Category category) async {
+  insertCategory(Category category) async {
     final db = await dbhelper.database;
     db.insert('category', category.toMap());
     print("category inserted suuscesfully ");
