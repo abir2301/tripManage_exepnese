@@ -2,9 +2,11 @@ class Category {
   late int categoryid;
   late String categoryname;
   Category({
-    required this.categoryid,
+    categoryid,
     required this.categoryname,
-  });
+  }) {
+    this.categoryid = categoryid;
+  }
   Category.fromMap(Map map) {
     categoryid = map['categoryId'];
     categoryname = map['categoryName'];

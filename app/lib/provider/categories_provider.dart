@@ -4,11 +4,18 @@ import 'package:flutter/cupertino.dart';
 
 class CategoriesProvider extends ChangeNotifier {
   CategoryOperations categoryOperations = CategoryOperations();
-  var categories = CategoryOperations().getAllCategories();
+  late List<Category> categories = [];
+  Future<List<Category>> getList() async {
+    categories = CategoryOperations().getAllCategories() as List<Category>;
+    return categories;
+  }
 
-  void addCategory(Category category) {
+  Future<void> addCategory(Category category) async {
+    print("into add new category ");
     categoryOperations.insertCategory(category);
+
     print(categories);
+
     notifyListeners();
   }
 

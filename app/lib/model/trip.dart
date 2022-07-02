@@ -23,11 +23,9 @@ class Trip {
     required this.startDate,
     required this.endDate,
     required this.totalAmount,
-    int? resAmount,
+   
     required this.curency,
-  }) {
-    restAmount = restAmount;
-  }
+  });
   void addPerson(PersonTrip _personTrip) {
     personTrip.add(_personTrip);
   }

@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            body: const TabBarView(
+            body: TabBarView(
               children: [
                 TripPage(),
                 CategoryPage(),

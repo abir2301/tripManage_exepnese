@@ -7,7 +7,8 @@ class CategoryOperations {
 
   final dbhelper = DBhelper.instance;
 
-  insertCategory(Category category) async {
+  Future insertCategory(Category category) async {
+    print("into insert new category ");
     final db = await dbhelper.database;
     db.insert('category', category.toMap());
     print("category inserted suuscesfully ");
@@ -21,8 +22,10 @@ class CategoryOperations {
     List<Category> categories =
         allRows.map((categor) => Category.fromMap(categor)).toList();
     print("get all categories  ");
+    print("print all categories $categories");
     return categories;
   }
+  
 
   updateCategory(Category category) async {
     final db = await dbhelper.database;
