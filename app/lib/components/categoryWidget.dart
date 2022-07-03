@@ -35,36 +35,57 @@ class DeleteCategory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     late Category helper = provider.categories[index];
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Text(
-            'Do you want to delete the ${helper.categoryname}?',
-            maxLines: 2,
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: ElevatedButton(
-                  child: Text('Delete it'),
-                  onPressed: () async {
-                    provider.removeCategory(helper);
-                    provider.categories.removeAt(index);
-                  },
+    return SizedBox(
+      height: MediaQuery.of(context).size.height * 0.23,
+      width: MediaQuery.of(context).size.width,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Text(
+              'Do you want to delete the ${helper.categoryname}?',
+              maxLines: 2,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    child: const  Text('Delete it'),
+                    onPressed: () async {
+                      provider.removeCategory(helper);
+                      provider.categories.removeAt(index);
+                      Navigator.of(context).pop();
+                    },
+                  ),
                 ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  child: Text('Return'),
-                  onPressed: () {},
+                const SizedBox(
+                  width: 10,
                 ),
-              ),
-            ],
-          ),
-        ],
+                Expanded(
+                  child: ElevatedButton(
+                    child:  const Text('Return'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
+  }
+}
+
+class EditCategory extends StatelessWidget {
+  const EditCategory({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
   }
 }

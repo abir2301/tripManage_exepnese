@@ -1,5 +1,8 @@
 import 'dart:math';
 
+import 'package:app/components/deleteDismiss_container.dart';
+import 'package:app/components/edit-dismiss_container.dart';
+import 'package:app/components/new_category_dialog.dart';
 import 'package:app/database/categories_operations.dart';
 import 'package:app/shared/style/colors.dart';
 import 'package:flutter/material.dart';
@@ -64,10 +67,32 @@ class _CategoryPageState extends State<CategoryPage> {
                               itemBuilder: (BuildContext, index) => Dismissible(
                                   key: ValueKey(categoriesProvider
                                       .categories[index].categoryid),
-                                  background: DeleteCategory(
-                                    provider: categoriesProvider,
-                                    index: index,
+                                  background: const DeleteDismiss(
+                                    verticalMargin: 0.01,
                                   ),
+                                  secondaryBackground:
+                                      const EditDismiss(verticalMargin: 0.01),
+                                  confirmDismiss: (direction) async {
+                                    if (direction ==
+                                        DismissDirection.startToEnd) {
+                                      return showModalBottomSheet(
+                                          context: context,
+                                          builder: (context) => DeleteCategory(
+                                              provider: categoriesProvider,
+                                              index: index));
+                                    } else {
+                                      return showDialog(
+                                          context: context,
+                                          builder: (context) => CategoryDialog(
+                                               skipFunction: (){
+                                                Navigator.pop(context) ;
+                                               },
+                                                category: categoriesProvider
+                                                    .categories[index],
+                                                provider: categoriesProvider,
+                                              ));
+                                    }
+                                  },
                                   // secondaryBackground: const editCategory(),
                                   child: Padding(
                                     padding: const EdgeInsets.all(3),
@@ -136,6 +161,7 @@ class _CategoryPageState extends State<CategoryPage> {
                             categoryname: categotyValue);
                         //     categoryOperations.insertCategory(_category);
                         await _provider.addCategory(_category);
+                        categoryController.clear();
 
                         Navigator.pop(context, 'OK');
                       }

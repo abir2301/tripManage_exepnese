@@ -55,6 +55,11 @@ class CategoriesProvider extends ChangeNotifier {
 //update category
   void removeCategory(Category category) {
     categoryOperations.deleteCategory(category);
-   notifyListeners();
+    notifyListeners();
+  }
+
+  void updateCatgory(Category category) {
+    categoryOperations.updateCategory(category);
+    notifyListeners();
   }
 }
