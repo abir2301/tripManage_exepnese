@@ -11,7 +11,7 @@ class DBhelper {
 
   static final DBhelper instance = DBhelper.privateConstructor();
 
-  final _databaseName = 'sqFlite1111';
+  final _databaseName = 'sqFlite11111';
   final _databaseVersion = 1;
   static late Database _database;
 

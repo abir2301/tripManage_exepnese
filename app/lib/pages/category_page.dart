@@ -22,22 +22,25 @@ class _CategoryPageState extends State<CategoryPage> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   late Category _category;
-
+  var provider;
+  CategoriesProvider getProvider(BuildContext context){
+    return   Provider.of<CategoriesProvider>(context);
+  }
   @override
   void initState() {
     super.initState();
+    //provider = Provider.of<CategoriesProvider>(context);
+    getProvider(context);
+    
     //refrech();
   }
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<CategoriesProvider>(context);
+    //final provider = Provider.of<CategoriesProvider>(context);
     late List<Category> categories = [];
     late String categotyValue;
     // ignore: unused_element
-    Future refrech() async {
-      categories = await provider.getList();
-    }
 
     // final Future<List<Category>> categories = provider.categories;
     return (Scaffold(
@@ -53,7 +56,8 @@ class _CategoryPageState extends State<CategoryPage> {
             }
             Object? data = snapshot.data;
             final List<Category> list = data as List<Category>;
-            if (snapshot.hasData) {
+            if (snapshot.hasData)
+             {
               print("we are in get all categories ");
               // ignore: unused_local_variable
 
