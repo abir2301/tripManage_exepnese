@@ -4,6 +4,7 @@ import 'package:app/database/categories_operations.dart';
 import 'package:app/shared/style/colors.dart';
 import 'package:flutter/material.dart';
 
+import '../components/categoryWidget.dart';
 import '../provider/categories_provider.dart';
 import 'package:provider/provider.dart';
 import '../model/categories.dart';
@@ -22,23 +23,15 @@ class _CategoryPageState extends State<CategoryPage> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   late Category _category;
-  var provider;
-  CategoriesProvider getProvider(BuildContext context){
-    return   Provider.of<CategoriesProvider>(context);
-  }
-  @override
-  void initState() {
-    super.initState();
-    //provider = Provider.of<CategoriesProvider>(context);
-    getProvider(context);
-    
-    //refrech();
+
+  CategoriesProvider getProvider(BuildContext context) {
+    return Provider.of<CategoriesProvider>(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    //final provider = Provider.of<CategoriesProvider>(context);
-    late List<Category> categories = [];
+    final _provider = Provider.of<CategoriesProvider>(context);
+    // _provider.categories = _provider.getList() as List<Category>;
     late String categotyValue;
     // ignore: unused_element
 
@@ -46,60 +39,42 @@ class _CategoryPageState extends State<CategoryPage> {
     return (Scaffold(
       body: FutureBuilder(
           // initialData: categories,
-          future: categoryOperations.getAllCategories(),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if (snapshot.hasError) {
-              print("error while get all categories  ");
-              return (const Center(
-                child: Text("there is no data yet "),
-              ));
-            }
-            Object? data = snapshot.data;
-            final List<Category> list = data as List<Category>;
-            if (snapshot.hasData)
-             {
-              print("we are in get all categories ");
-              // ignore: unused_local_variable
-
-              return (ListView.separated(
-                  scrollDirection: Axis.vertical,
-                  padding: const EdgeInsets.all(2),
-                  itemCount: list.length,
-                  separatorBuilder: (BuildContext, index) {
-                    return const Divider(height: 1);
-                  },
-                  // ignore: avoid_types_as_parameter_names, non_constant_identifier_names
-                  itemBuilder: (BuildContext, index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(3),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          // color: categoriesColors[
-                          //     Random().nextInt(categoriesColors.length)]
-                        ),
-                        child: GestureDetector(
-                          // onTap: () => {provider.removeCategory(_category)},
-                          child: ListTile(
-                            title: Text(
-                              list[index].categoryname,
-                              style: const TextStyle(fontSize: 20),
-                            ),
-                            trailing: const Icon(Icons.card_travel),
-                          ),
-                        ),
-                      ),
-                    );
-                  }));
-            }
-            return (const Center(
-              child: Text('no data yet '),
-            ));
-            // ignore: curly_braces_in_flow_control_structures
-            // else(
-            // return( Text("there is no data ")));
-            // )
-          }),
+          future: Provider.of<CategoriesProvider>(context, listen: true)
+              .getAllCategories(),
+          builder: (context, snapshot) => snapshot.connectionState ==
+                  ConnectionState.waiting
+              ? const Center(child: CircularProgressIndicator())
+              : Consumer<CategoriesProvider>(
+                  child: const Center(
+                    child: Text('no data yet'),
+                  ),
+                  builder: (context, categoriesProvider, child) =>
+                      categoriesProvider.categories.isEmpty
+                          ? const Center(
+                              child: Text('no data yet'),
+                            )
+                          : ListView.separated(
+                              scrollDirection: Axis.vertical,
+                              padding: const EdgeInsets.all(2),
+                              itemCount: categoriesProvider.categories.length,
+                              separatorBuilder: (BuildContext, index) {
+                                return const Divider(height: 1);
+                              },
+                              // ignore: avoid_types_as_parameter_names, non_constant_identifier_names
+                              itemBuilder: (BuildContext, index) => Dismissible(
+                                  key: ValueKey(categoriesProvider
+                                      .categories[index].categoryid),
+                                  background: DeleteCategory(
+                                    provider: categoriesProvider,
+                                    index: index,
+                                  ),
+                                  // secondaryBackground: const editCategory(),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(3),
+                                    child: CatgoryWidget(
+                                        provider: categoriesProvider,
+                                        index: index),
+                                  ))))),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => showDialog<String>(
@@ -152,15 +127,15 @@ class _CategoryPageState extends State<CategoryPage> {
                 ),
                 GestureDetector(
                   child: TextButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (formKey.currentState!.validate()) {
                         // ignore: unnecessary_new
 
-                        _category = new Category(
+                        _category = Category(
                             categoryid: Random().nextInt(1000000),
                             categoryname: categotyValue);
                         //     categoryOperations.insertCategory(_category);
-                        provider.addCategory(_category);
+                        await _provider.addCategory(_category);
 
                         Navigator.pop(context, 'OK');
                       }

@@ -15,13 +15,11 @@ class CategoryOperations {
   }
 
   Future<List<Category>> getAllCategories() async {
-    print("we are in get all Categorie ");
     final db = await dbhelper.database;
     List<Map<String, dynamic>> allRows = await db.query('category');
-    print("get alla rows is done ");
     List<Category> categories =
         allRows.map((categor) => Category.fromMap(categor)).toList();
-    print("get all categories  ");
+    
     print("print all categories $categories");
     return categories;
   }

@@ -39,7 +39,7 @@ class _HomePageState extends State<HomePage> {
               bottom: const TabBar(
                 tabs: [
                   Tab(icon: Icon(Icons.home)),
-                  Tab(icon: Icon(Icons.category)),
+                    Tab(icon: Icon(Icons.category)),
                   Tab(icon: Icon(Icons.settings)),
                 ],
               ),
@@ -47,7 +47,7 @@ class _HomePageState extends State<HomePage> {
             body: TabBarView(
               children: [
                 TripPage(),
-                CategoriesTest(),
+                  CategoryPage(),
                 SettingPage(),
               ],
             ),
