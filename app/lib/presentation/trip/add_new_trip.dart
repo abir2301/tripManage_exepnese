@@ -1,7 +1,8 @@
-// ignore_for_file: deprecated_member_use, sized_box_for_whitespace
+// ignore_for_file: deprecated_member_use, sized_box_for_whitespace, must_be_immutable
 
 import 'dart:io';
 
+import 'package:app/provider/trip_provider.dart';
 import 'package:app/shared/Utility.dart';
 import 'package:app/shared/style/colors.dart';
 import 'package:currency_picker/currency_picker.dart';
@@ -10,15 +11,13 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:provider/provider.dart';
 
-class NewTrip extends StatefulWidget {
-  const NewTrip({Key? key}) : super(key: key);
+import '../../model/trip.dart';
 
-  @override
-  State<NewTrip> createState() => _NewTripState();
-}
-
-class _NewTripState extends State<NewTrip> {
+class AddTrip extends StatelessWidget {
+  AddTrip({Key? key, required provider}) : super(key: key);
+  late TripProvider provider;
   var Titlecontroller = TextEditingController();
   var descriptioncontroller = TextEditingController();
   var formkey = GlobalKey<FormState>();
@@ -27,10 +26,11 @@ class _NewTripState extends State<NewTrip> {
   //var personnamecontroler = TextEditingController();
   var depositamountcontroler = TextEditingController();
   late String _curency = "dt ";
-
+  late String dateStart;
+  late String dateEnd;
   late DateTime valur;
   bool _load = false;
-  late File? _imageFile;
+  late File _imageFile;
   final format = DateFormat("yyyy-MM-dd");
 
   late String imageString;
@@ -41,12 +41,12 @@ class _NewTripState extends State<NewTrip> {
       final file = await ImagePicker().pickImage(source: source);
       if (file == null) return;
       final File temporyimage = File(file.path);
-      setState(() {
-        this._imageFile = temporyimage;
-        imageString = Utility.base64String(_imageFile!.readAsBytesSync());
+      // setState(() {
+      //   this._imageFile = temporyimage;
+      //   imageString = Utility.base64String(_imageFile!.readAsBytesSync());
 
-        _load = true;
-      });
+      //   _load = true;
+      // });
     } on PlatformException catch (e) {
       print("failed to pick image :$e");
     }
@@ -93,6 +93,7 @@ class _NewTripState extends State<NewTrip> {
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -116,7 +117,7 @@ class _NewTripState extends State<NewTrip> {
                                   ? Container(
                                       decoration: BoxDecoration(
                                         image: DecorationImage(
-                                            image: FileImage(_imageFile!),
+                                            image: FileImage(_imageFile),
                                             fit: BoxFit.cover),
                                         borderRadius: BorderRadius.circular(8),
                                       ),
@@ -231,12 +232,10 @@ class _NewTripState extends State<NewTrip> {
                                             currentValue ?? DateTime.now(),
                                         lastDate: DateTime(2100));
                                     if (date != null) {
-                                      var date_start = date;
-                                      print(
-                                          " date_start est ${date_start.toString()}");
+                                      dateStart = date.toString();
+                                      print(" date_start est ${dateStart}");
 
-                                      date_start = date;
-                                      return date_start;
+                                      return date;
                                     }
                                   }),
                             ),
@@ -277,9 +276,8 @@ class _NewTripState extends State<NewTrip> {
                                         initialDate: DateTime.now(),
                                         lastDate: DateTime(2100));
                                     if (date != null) {
-                                      var date_finish = date;
-                                      print(
-                                          " la date_finish est ${date_finish.toString()}");
+                                      dateEnd = date.toString();
+                                      print(" la date_finish est ${dateEnd}}");
                                       return date;
                                     }
                                   }),
@@ -311,7 +309,7 @@ class _NewTripState extends State<NewTrip> {
                                   },
                                   controller: depositamountcontroler,
                                 ),
-                              ), 
+                              ),
                               Padding(
                                 padding: const EdgeInsets.only(left: 8),
                                 child: Container(
@@ -343,11 +341,11 @@ class _NewTripState extends State<NewTrip> {
                                                 showSearchField: true,
                                                 showCurrencyName: true,
                                                 showCurrencyCode: true,
-                                                onSelect: (Currency currency) {
-                                                  setState(() {
-                                                    _curency = currency.symbol;
-                                                  });
-                                                },
+                                                onSelect:
+                                                    (Currency currency) {},
+                                                // onSelect: (Currency currency) {
+                                                //  return currency ;
+                                                // },
                                                 favorite: ['SEK'],
                                               );
                                             })
@@ -368,7 +366,20 @@ class _NewTripState extends State<NewTrip> {
                               color: pink(),
                               padding: const EdgeInsets.all(2),
                               child: const Text("Save Trip "),
-                              onPressed: () {},
+                              onPressed: () {
+                                if (formkey.currentState!.validate()) {
+                                  var trip = Trip(
+                                      id: 0,
+                                      name: Titlecontroller.text,
+                                      description: descriptioncontroller.text,
+                                      curency: _curency,
+                                      imageUrl: _imageFile,
+                                      endDate: dateEnd,
+                                      startDate: dateStart,
+                                      totalAmount: depositamountcontroler.text);
+                                  provider.insertTrip(trip);
+                                }
+                              },
                             ),
                           ),
                         ),

@@ -11,7 +11,7 @@ class DBhelper {
 
   static final DBhelper instance = DBhelper.privateConstructor();
 
-  final _databaseName = 'trip23010';
+  final _databaseName = 'trip230100';
   final _databaseVersion = 1;
   static late Database _database;
 
@@ -45,7 +45,7 @@ class DBhelper {
 //trip table done
     await db
         .execute(
-            'CREATE TABLE trip ( tripId INTEGER PRIMARY KEY AUTOINCREMENT  ,tripName TEXT ,tripDescription TEXT, trip_Date_Start TEXT,  trip_date_finich TEXT,trip_Image TEXT)')
+            'CREATE TABLE trip ( tripId INTEGER PRIMARY KEY AUTOINCREMENT  ,tripName TEXT ,tripDescription TEXT, trip_Date_Start TEXT,  trip_date_finich TEXT,trip_Image TEXT ,totalAmount TEXT ,curency TEXT)')
         .then((value) {
       print(" create  trip table  ");
     }).catchError((Error) {
